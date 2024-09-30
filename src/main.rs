@@ -28,6 +28,7 @@ fn main() {
     device.push_error_scope(ErrorFilter::Validation);
 
     // Create implicitly invalid pipeline
+    // Has two push constants in the same stage
     let _module = device.create_shader_module(ShaderModuleDescriptor {
         label: None,
         source: ShaderSource::Naga(std::borrow::Cow::Owned(naga)),
