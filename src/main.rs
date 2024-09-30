@@ -35,7 +35,8 @@ fn main() {
     });
 
     match pollster::block_on(device.pop_error_scope()) {
-        Some(e) => panic!("{e}"),
+        // PANICS!
+        Some(e) => println!("{e:?}"),
         None => println!("that worked out okay but... it souldn't have..."),
     }
 }
