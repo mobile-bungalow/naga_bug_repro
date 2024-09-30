@@ -42,16 +42,7 @@ fn main() {
 }
 
 fn set_up_wgpu() -> (wgpu::Device, wgpu::Queue) {
-    let instance = if cfg!(windows) {
-        let desc = wgpu::InstanceDescriptor {
-            backends: wgpu::Backends::DX12,
-            ..Default::default()
-        };
-
-        wgpu::Instance::new(desc)
-    } else {
-        wgpu::Instance::default()
-    };
+    let instance = wgpu::Instance::default();
 
     let adapter = pollster::block_on(async {
         instance
@@ -63,18 +54,15 @@ fn set_up_wgpu() -> (wgpu::Device, wgpu::Queue) {
             .await
             .expect("Failed to find an appropriate adapter")
     });
-    let mut required_limits = wgpu::Limits::default().using_resolution(adapter.limits());
-    required_limits.max_push_constant_size = 128;
+
+    let required_limits = wgpu::Limits::default().using_resolution(adapter.limits());
 
     let (d, q) = pollster::block_on(async {
         adapter
             .request_device(
                 &wgpu::DeviceDescriptor {
                     label: None,
-                    required_features: wgpu::Features::PUSH_CONSTANTS
-                        | wgpu::Features::TEXTURE_ADAPTER_SPECIFIC_FORMAT_FEATURES
-                        | wgpu::Features::MAPPABLE_PRIMARY_BUFFERS
-                        | wgpu::Features::CLEAR_TEXTURE,
+                    required_features: wgpu::Features::empty(),
                     required_limits,
                     memory_hints: wgpu::MemoryHints::Performance,
                 },
