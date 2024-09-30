@@ -1,0 +1,8 @@
+[package]
+name = "repro_crash"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+wgpu = { version = "22.1.0", features = ["glsl", "naga-ir"] }
+pollster = "*"
